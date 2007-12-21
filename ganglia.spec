@@ -13,6 +13,7 @@ Release:        %{release}
 Group:        	Monitoring
 Summary: 	Ganglia Cluster Toolkit
 Url:		http://ganglia.sourceforge.net
+BuildRoot:      %{_tmppath}/%{name}-buildroot
 Source:		%{name}-%{version}.tar.bz2
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
