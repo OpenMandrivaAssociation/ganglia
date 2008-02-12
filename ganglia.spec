@@ -1,5 +1,5 @@
 %define name	ganglia
-%define version 3.0.4
+%define version 3.0.6
 %define release %mkrel 1
 %define lib_name_orig lib%{name}
 %define lib_major 1
@@ -13,7 +13,6 @@ Release:        %{release}
 Group:        	Monitoring
 Summary: 	Ganglia Cluster Toolkit
 Url:		http://ganglia.sourceforge.net
-BuildRoot:      %{_tmppath}/%{name}-buildroot
 Source:		%{name}-%{version}.tar.bz2
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
