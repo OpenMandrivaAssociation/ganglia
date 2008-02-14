@@ -11,6 +11,7 @@ License:      	BSD
 Version:        %{version}
 Release:        %{release}
 Group:        	Monitoring
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Summary: 	Ganglia Cluster Toolkit
 Url:		http://ganglia.sourceforge.net
 Source:		%{name}-%{version}.tar.bz2
