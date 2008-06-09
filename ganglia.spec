@@ -141,13 +141,21 @@ cluster, hosts and host metrics to be viewed in real-time.
 %preun gmetad
 %_preun_service gmetad 
 
+%if %mdkversion < 200900
 %post -p /sbin/ldconfig -n %{lib_name} 
+%endif
 
+%if %mdkversion < 200900
 %post -p /sbin/ldconfig -n %{lib_name}-devel 
+%endif
 
+%if %mdkversion < 200900
 %postun -p /sbin/ldconfig -n %{lib_name} 
+%endif
 
+%if %mdkversion < 200900
 %postun -p /sbin/ldconfig -n %{lib_name}-devel 
+%endif
 
 %install 
 rm -fr %buildroot
