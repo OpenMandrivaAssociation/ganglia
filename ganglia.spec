@@ -1,6 +1,6 @@
 %define name	ganglia
 %define version 3.0.6
-%define release %mkrel 1
+%define release %mkrel 3
 %define lib_name_orig lib%{name}
 %define lib_major 1
 %define lib_name %mklibname %name %{lib_major}
