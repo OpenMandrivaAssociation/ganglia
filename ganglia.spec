@@ -163,7 +163,7 @@ cluster, hosts and host metrics to be viewed in real-time.
 %install 
 rm -fr %buildroot
 %{__mkdir} -p %{buildroot}%{_initrddir}
-%{__mkdir} -p %{buildroot}%{_initrddir}
+%{__mkdir} -p %{buildroot}%{_sysconfdir}/ganglia
 %{__mkdir} -p %{buildroot}%{_oldincludedir}/ganglia
 %{__mkdir} -p %{buildroot}%{_mandir}/man1
 %{__mkdir} -p %{buildroot}%{_sysconfdir}/logrotate.d/
@@ -179,7 +179,7 @@ find  $RPM_BUILD_DIR/%{name}-%{version}/ -name "CVS" | xargs rm -rf
 
 #cp -f %{_builddir}/%{name}-core-%{version}/lib/ganglia/* %{buildroot}/%{_oldincludedir}/ganglia/
 cp -f %{_builddir}/%{name}-%{version}/mans/* %{buildroot}%{_mandir}/man1/
-%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/%{_sysconfdir}/gmetad.conf
+%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/%{_sysconfdir}/ganglia/gmetad.conf
 %__cp -f %{SOURCE8} %{buildroot}/%{_initrddir}/gmetad
 cp -avf %{_builddir}/%{name}-%{version}/web $RPM_BUILD_ROOT/var/www/html/ganglia
 
@@ -189,7 +189,6 @@ cp -avf %{_builddir}/%{name}-%{version}/web $RPM_BUILD_ROOT/var/www/html/ganglia
 #install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/gmond.conf
 
 #script
-%{__mkdir} -p %{buildroot}%{_initrddir}
 %{__mkdir} -p %{buildroot}%{_bindir}
 %{__mkdir} -p %{buildroot}%{_datadir}/%{name}-script/script/
 %{__mkdir} -p %{buildroot}%{_defaultdocdir}/%{name}-script-%{version}/
@@ -201,8 +200,8 @@ install %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/ganglia-monitor-core
 install %{SOURCE7} %{buildroot}/%{_initrddir}/gmond
 rm -rf  %{buildroot}%{_includedir}/*.h
 
-%{_builddir}/%{name}-%{version}/gmond/gmond -t > %{buildroot}%{_sysconfdir}/gmond.conf
-perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfdir}/gmond.conf
+%{_builddir}/%{name}-%{version}/gmond/gmond -t > %{buildroot}%{_sysconfdir}/ganglia/gmond.conf
+perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfdir}/ganglia/gmond.conf
 
 %multiarch_binaries $RPM_BUILD_ROOT%{_bindir}/ganglia-config
 
@@ -211,7 +210,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %attr(0777,root,root)/var/lib/ganglia/rrds
 %{_sbindir}/gmetad
 %config(noreplace) %{_initrddir}/gmetad
-%config(noreplace) /etc/gmetad.conf
+%config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
 
 %files core 
 %defattr(-,root,root)
@@ -222,7 +221,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %{_bindir}/ganglia-config
 %{_sbindir}/gmond
 %config(noreplace) %{_initrddir}/gmond
-%config(noreplace) %{_sysconfdir}/gmond.conf
+%config(noreplace) %{_sysconfdir}/ganglia/gmond.conf
 %{_mandir}/man1/*
 %attr(644,root,root)%config(noreplace) %{_sysconfdir}/logrotate.d/ganglia-monitor-core
 
@@ -231,12 +230,12 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
 %{_libdir}/lib%{name}*
+%{_libdir}/ganglia/*.so
 
 %files -n %{lib_name}-devel
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
 %{_includedir}/*
-%{_libdir}/ganglia/*.so
 %{_libdir}/*.la
 %{_libdir}/*.a
 
