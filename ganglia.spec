@@ -1,6 +1,6 @@
 %define name	ganglia
-%define version 3.0.6
-%define release %mkrel 3
+%define version 3.1.0
+%define release %mkrel 1
 %define lib_name_orig lib%{name}
 %define lib_major 1
 %define lib_name %mklibname %name %{lib_major}
@@ -24,8 +24,11 @@ Source4:	ganglia-script
 Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
 Source7: 	gmond-init-add-route
+Source8:	gmetad.init
 BuildRequires:	librrdtool-devel
 BuildRequires:  freetype2-static-devel
+Buildrequires:	libapr-devel libconfuse-devel libexpat-devel
+Buildrequires:  gettext-devel python-devel
 
 %description
 Ganglia is a scalable, real-time cluster monitoring and execution environment 
@@ -118,7 +121,7 @@ cluster, hosts and host metrics to be viewed in real-time.
 #./configure --prefix=%{buildroot}/usr --libdir=%{buildroot}%{_libdir} --with-gmetad
 #make
 
-%configure --with-gmetad --enable-debug
+%configure --with-gmetad --enable-status
 %make
 
 #core
@@ -176,8 +179,8 @@ find  $RPM_BUILD_DIR/%{name}-%{version}/ -name "CVS" | xargs rm -rf
 
 #cp -f %{_builddir}/%{name}-core-%{version}/lib/ganglia/* %{buildroot}/%{_oldincludedir}/ganglia/
 cp -f %{_builddir}/%{name}-%{version}/mans/* %{buildroot}%{_mandir}/man1/
-%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/etc/gmetad.conf
-%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.init $RPM_BUILD_ROOT/etc/rc.d/init.d/gmetad
+%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/%{_sysconfdir}/gmetad.conf
+%__cp -f %{SOURCE8} %{buildroot}/%{_initrddir}/gmetad
 cp -avf %{_builddir}/%{name}-%{version}/web $RPM_BUILD_ROOT/var/www/html/ganglia
 
 # Patching libdir in libganglia.la : removing buildroot path
@@ -233,7 +236,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
 %{_includedir}/*
-#%{_libdir}/*.so
+%{_libdir}/*.so
 %{_libdir}/*.la
 %{_libdir}/*.a
 
