@@ -236,7 +236,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
 %{_includedir}/*
-%{_libdir}/*.so
+%{_libdir}/ganglia/*.so
 %{_libdir}/*.la
 %{_libdir}/*.a
 
