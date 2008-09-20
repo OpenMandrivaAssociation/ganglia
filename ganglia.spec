@@ -1,19 +1,15 @@
-%define name	ganglia
-%define version 3.1.0
-%define release %mkrel 1
 %define lib_name_orig lib%{name}
 %define lib_major 1
 %define lib_name %mklibname %name %{lib_major}
 %define script_version 0.3 
 
-Name:         	%{name}
+Name:         	ganglia
 License:      	BSD
-Version:        %{version}
-Release:        %{release}
+Version:        3.1.0
+Release:        %mkrel 2
 Group:        	Monitoring
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Summary: 	Ganglia Cluster Toolkit
-Url:		http://ganglia.sourceforge.net
+URL:		http://ganglia.sourceforge.net
 Source:		%{name}-%{version}.tar.bz2
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
@@ -25,10 +21,14 @@ Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
 Source7: 	gmond-init-add-route
 Source8:	gmetad.init
-BuildRequires:	librrdtool-devel
+Buildrequires:	apr-devel
+BuildRequires:	confuse-devel
+BuildRequires:	expat-devel
 BuildRequires:  freetype2-static-devel
-Buildrequires:	libapr-devel libconfuse-devel libexpat-devel
-Buildrequires:  gettext-devel python-devel
+Buildrequires:  gettext-devel
+BuildRequires:	python-devel
+BuildRequires:	rrdtool-devel
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Ganglia is a scalable, real-time cluster monitoring and execution environment 
