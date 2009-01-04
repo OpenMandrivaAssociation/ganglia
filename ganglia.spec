@@ -1,12 +1,12 @@
 %define lib_name_orig lib%{name}
 %define lib_major 1
 %define lib_name %mklibname %name %{lib_major}
-%define script_version 0.3 
+%define script_version 0.3
 
 Name:         	ganglia
 License:      	BSD
-Version:        3.1.0
-Release:        %mkrel 2
+Version:        3.1.1
+Release:        %mkrel 1
 Group:        	Monitoring
 Summary: 	Ganglia Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
@@ -21,6 +21,7 @@ Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
 Source7: 	gmond-init-add-route
 Source8:	gmetad.init
+Patch0:         fix-string-litteral-error.patch
 Buildrequires:	apr-devel
 BuildRequires:	confuse-devel
 BuildRequires:	expat-devel
@@ -31,12 +32,12 @@ BuildRequires:	rrdtool-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
-Ganglia is a scalable, real-time cluster monitoring and execution environment 
-with all execution requests and cluster statistics expressed in an open 
+Ganglia is a scalable, real-time cluster monitoring and execution environment
+with all execution requests and cluster statistics expressed in an open
 well-defined XML format.
 
 %package 	core
-Group:		Monitoring 
+Group:		Monitoring
 Summary:	Ganglia Cluster Core
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -60,7 +61,7 @@ This gmetad daemon can aggregate monitoring data from several clusters
 to form a monitoring grid. It also keeps metric history using the RRD tool.
 
 %package 	-n %{lib_name}-devel
-Group:		Development/Other 
+Group:		Development/Other
 Summary:	Ganglia Cluster Toolkit Library
 Provides:	libganglia-devel = %{version}-%{release}
 Provides:	%name-devel = %{version}-%{release}
@@ -69,20 +70,20 @@ Requires(post): rpm-helper
 Requires(preun): rpm-helper
 
 %description	-n %{lib_name}-devel
-The Ganglia Monitoring Core library provides a set of 
-functions that programmers can use to build scalable 
+The Ganglia Monitoring Core library provides a set of
+functions that programmers can use to build scalable
 cluster or grid applications.
 
 %package 	-n %{lib_name}
-Group:		Development/Other 
+Group:		Development/Other
 Summary:	Ganglia Cluster Toolkit Library
 Provides:	lib%name = %{version}-%{release}
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 
 %description	-n %{lib_name}
-The Ganglia Monitoring Core library provides a set of 
-functions that programmers can use to build scalable 
+The Ganglia Monitoring Core library provides a set of
+functions that programmers can use to build scalable
 cluster or grid applications.
 
 %package	script
@@ -115,6 +116,7 @@ cluster, hosts and host metrics to be viewed in real-time.
 %prep
 %setup -q -T -n %{name}-monitor-script-%{script_version} -b 2
 %setup -q -T -n %{name}-%{version} -b 0
+%patch0 -p0
 
 %build
 #rm -rf %{buildroot}
@@ -132,35 +134,35 @@ cluster, hosts and host metrics to be viewed in real-time.
 %_preun_service gmond
 
 #script
-%post script 
+%post script
 %_post_service ganglia-script
 
 %preun script
-%_preun_service ganglia-script 
+%_preun_service ganglia-script
 
 %post gmetad
 %_post_service gmetad
 
 %preun gmetad
-%_preun_service gmetad 
+%_preun_service gmetad
 
 %if %mdkversion < 200900
-%post -p /sbin/ldconfig -n %{lib_name} 
+%post -p /sbin/ldconfig -n %{lib_name}
 %endif
 
 %if %mdkversion < 200900
-%post -p /sbin/ldconfig -n %{lib_name}-devel 
+%post -p /sbin/ldconfig -n %{lib_name}-devel
 %endif
 
 %if %mdkversion < 200900
-%postun -p /sbin/ldconfig -n %{lib_name} 
+%postun -p /sbin/ldconfig -n %{lib_name}
 %endif
 
 %if %mdkversion < 200900
-%postun -p /sbin/ldconfig -n %{lib_name}-devel 
+%postun -p /sbin/ldconfig -n %{lib_name}-devel
 %endif
 
-%install 
+%install
 rm -fr %buildroot
 %{__mkdir} -p %{buildroot}%{_initrddir}
 %{__mkdir} -p %{buildroot}%{_sysconfdir}/ganglia
@@ -170,7 +172,7 @@ rm -fr %buildroot
 %{__mkdir} -p $RPM_BUILD_ROOT/var/lib/ganglia/rrds
 %{__mkdir} -p $RPM_BUILD_ROOT/var/www/html
 
-%makeinstall_std 
+%makeinstall_std
 
 #Disabling setuid
 echo "setuid off" >> %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf
@@ -212,7 +214,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %config(noreplace) %{_initrddir}/gmetad
 %config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
 
-%files core 
+%files core
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL gmond/gmond.conf.html
 %{_bindir}/gmetric
