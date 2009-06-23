@@ -5,12 +5,12 @@
 
 Name:         	ganglia
 License:      	BSD
-Version:        3.1.1
+Version:        3.1.2
 Release:        %mkrel 1
 Group:        	Monitoring
 Summary: 	Ganglia Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
-Source:		%{name}-%{version}.tar.bz2
+Source:		http://downloads.sourceforge.net/ganglia/%{name}-%{version}.tar.gz
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
 Source1:	gmond.conf
@@ -21,7 +21,7 @@ Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
 Source7: 	gmond-init-add-route
 Source8:	gmetad.init
-Patch0:         fix-string-litteral-error.patch
+Patch0:         ganglia-3.1.2-fix-format-errors.patch
 Buildrequires:	apr-devel
 BuildRequires:	confuse-devel
 BuildRequires:	expat-devel
@@ -116,14 +116,14 @@ cluster, hosts and host metrics to be viewed in real-time.
 %prep
 %setup -q -T -n %{name}-monitor-script-%{script_version} -b 2
 %setup -q -T -n %{name}-%{version} -b 0
-%patch0 -p0
+%patch0 -p1
 
 %build
 #rm -rf %{buildroot}
 #./configure --prefix=%{buildroot}/usr --libdir=%{buildroot}%{_libdir} --with-gmetad
 #make
 
-%configure --with-gmetad --enable-status
+%configure2_5x --with-gmetad --enable-status
 %make
 
 #core
