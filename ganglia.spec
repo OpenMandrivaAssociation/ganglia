@@ -3,30 +3,30 @@
 %define lib_name %mklibname %name %{lib_major}
 %define script_version 0.3
 
-Name:         	ganglia
-License:      	BSD
-Version:        3.1.2
-Release:        %mkrel 4
-Group:        	Monitoring
-Summary: 	Ganglia Cluster Toolkit
+Name:		ganglia
+License:	BSD
+Version:	3.1.7
+Release:	%mkrel 1
+Group:		Monitoring
+Summary:	Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
 Source:		http://downloads.sourceforge.net/ganglia/%{name}-%{version}.tar.gz
 Requires(post):	rpm-helper
 Requires(preun): rpm-helper
-Source1:	gmond.conf
+#Source1:	gmond.conf
 Source2:	%{name}-monitor-script-%{script_version}.tar.bz2
 Source3:	%{name}-monitor-script.d
 Source4:	ganglia-script
 Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
-Source7: 	gmond-init-add-route
+Source7:	gmond-init-add-route
 Source8:	gmetad.init
-Patch0:         ganglia-3.1.2-fix-format-errors.patch
+Patch0:		ganglia-3.1.2-fix-format-errors.patch
 Buildrequires:	apr-devel
 BuildRequires:	confuse-devel
 BuildRequires:	expat-devel
-BuildRequires:  freetype2-static-devel
-Buildrequires:  gettext-devel
+BuildRequires:	freetype2-static-devel
+Buildrequires:	gettext-devel
 BuildRequires:	python-devel
 BuildRequires:	rrdtool-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -38,7 +38,7 @@ well-defined XML format.
 
 %package 	core
 Group:		Monitoring
-Summary:	Ganglia Cluster Core
+Summary:	Cluster Core
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 
@@ -47,7 +47,7 @@ The core package of Ganglia Monitor.
 
 %package	gmetad
 Group:		Monitoring
-Summary: 	Ganglia Meta daemon
+Summary:	Meta daemon
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 Requires:	%name-core = %{version}-%{release}
@@ -62,7 +62,7 @@ to form a monitoring grid. It also keeps metric history using the RRD tool.
 
 %package 	-n %{lib_name}-devel
 Group:		Development/Other
-Summary:	Ganglia Cluster Toolkit Library
+Summary:	Cluster Toolkit Library
 Provides:	libganglia-devel = %{version}-%{release}
 Provides:	%name-devel = %{version}-%{release}
 Requires:	lib%name-devel = %{version}-%{release}
@@ -76,7 +76,7 @@ cluster or grid applications.
 
 %package 	-n %{lib_name}
 Group:		Development/Other
-Summary:	Ganglia Cluster Toolkit Library
+Summary:	Cluster Toolkit Library
 Provides:	lib%name = %{version}-%{release}
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -88,8 +88,8 @@ cluster or grid applications.
 
 %package	script
 Group:		Monitoring
-Summary:	Ganglia Cluster Script
-Provides:	%{name}-script
+Summary:	Cluster Script
+Provides:	%{name}-script = %{version}-%{release}
 Requires:	%{name}-core
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -102,7 +102,7 @@ Ganglia Monitor.
 %package        webfrontend
 Group:          Monitoring
 Summary:        Ganglia Web Frontend
-Provides:       %{name}-webfrontend
+Provides:       %{name}-webfrontend = %{version}-%{release}
 Requires:       %{name}-core, mod_php, rrdtool >= 1.0.37, %name-gmetad >= 3.0.0, php-xml, php-gd
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
@@ -119,9 +119,7 @@ cluster, hosts and host metrics to be viewed in real-time.
 %patch0 -p1
 
 %build
-#rm -rf %{buildroot}
-#./configure --prefix=%{buildroot}/usr --libdir=%{buildroot}%{_libdir} --with-gmetad
-#make
+rm -rf %{buildroot}
 
 %configure2_5x --with-gmetad --enable-status
 %make
@@ -142,6 +140,10 @@ cluster, hosts and host metrics to be viewed in real-time.
 
 %post gmetad
 %_post_service gmetad
+if [ -d "var/lib/ganglia/rrds" ]; then 
+	echo "gmetad is launched as nobody users now, changing /var/lib/ganglia/rrds permissions to nobody.nobody"
+	chown -R nobody.nobody /var/lib/ganglia/rrds
+fi
 
 %preun gmetad
 %_preun_service gmetad
@@ -181,7 +183,7 @@ find  $RPM_BUILD_DIR/%{name}-%{version}/ -name "CVS" | xargs rm -rf
 
 #cp -f %{_builddir}/%{name}-core-%{version}/lib/ganglia/* %{buildroot}/%{_oldincludedir}/ganglia/
 cp -f %{_builddir}/%{name}-%{version}/mans/* %{buildroot}%{_mandir}/man1/
-%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/%{_sysconfdir}/ganglia/gmetad.conf
+#%__cp -f %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf $RPM_BUILD_ROOT/%{_sysconfdir}/ganglia/gmetad.conf
 %__cp -f %{SOURCE8} %{buildroot}/%{_initrddir}/gmetad
 cp -avf %{_builddir}/%{name}-%{version}/web $RPM_BUILD_ROOT/var/www/html/ganglia
 
@@ -202,17 +204,18 @@ install %{SOURCE6} %{buildroot}%{_sysconfdir}/logrotate.d/ganglia-monitor-core
 install %{SOURCE7} %{buildroot}/%{_initrddir}/gmond
 rm -rf  %{buildroot}%{_includedir}/*.h
 
-%{_builddir}/%{name}-%{version}/gmond/gmond -t > %{buildroot}%{_sysconfdir}/ganglia/gmond.conf
-perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfdir}/ganglia/gmond.conf
+%{_builddir}/%{name}-%{version}/gmond/gmond -t > %{buildroot}%{_sysconfdir}/gmond.conf
+perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfdir}/gmond.conf
 
 %multiarch_binaries $RPM_BUILD_ROOT%{_bindir}/ganglia-config
 
 %files gmetad
 %defattr(-,root,root)
-%attr(0777,root,root)/var/lib/ganglia/rrds
+%attr(0777,nobody,nobody)/var/lib/ganglia/rrds
 %{_sbindir}/gmetad
 %config(noreplace) %{_initrddir}/gmetad
-%config(noreplace) %{_sysconfdir}/ganglia/gmetad.conf
+%config(noreplace) %{_sysconfdir}/conf.d/modpython.conf
+%config(noreplace) %{_sysconfdir}/gmetad.conf
 
 %files core
 %defattr(-,root,root)
@@ -223,7 +226,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %{_bindir}/ganglia-config
 %{_sbindir}/gmond
 %config(noreplace) %{_initrddir}/gmond
-%config(noreplace) %{_sysconfdir}/ganglia/gmond.conf
+%config(noreplace) %{_sysconfdir}/gmond.conf
 %{_mandir}/man1/*
 %attr(644,root,root)%config(noreplace) %{_sysconfdir}/logrotate.d/ganglia-monitor-core
 
