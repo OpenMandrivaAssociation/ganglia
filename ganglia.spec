@@ -6,7 +6,7 @@
 Name:		ganglia
 License:	BSD
 Version:	3.1.7
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		Monitoring
 Summary:	Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
@@ -65,7 +65,8 @@ Group:		Development/Other
 Summary:	Cluster Toolkit Library
 Provides:	libganglia-devel = %{version}-%{release}
 Provides:	%name-devel = %{version}-%{release}
-Requires:	lib%name-devel = %{version}-%{release}
+Requires:	%{lib_name} = %{version}-%{release}
+Conflicts:	%{lib_name} < 3.1.7-3
 Requires(post): rpm-helper
 Requires(preun): rpm-helper
 
@@ -234,15 +235,16 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %files -n %{lib_name}
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
-%{_libdir}/lib%{name}*
+%{_libdir}/libganglia-%{version}.so.*
 %{_libdir}/ganglia/*.so
 
 %files -n %{lib_name}-devel
 %defattr(-,root,root)
 %doc README AUTHORS ChangeLog COPYING INSTALL
 %{_includedir}/*
-%{_libdir}/*.la
-%{_libdir}/*.a
+%{_libdir}/libganglia.so
+%{_libdir}/libganglia.la
+%{_libdir}/libganglia.a
 
 %files script
 %defattr(-,root,root)
