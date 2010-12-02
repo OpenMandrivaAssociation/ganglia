@@ -6,7 +6,7 @@
 Name:		ganglia
 License:	BSD
 Version:	3.1.7
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Monitoring
 Summary:	Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
