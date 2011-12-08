@@ -180,7 +180,7 @@ rm -fr %buildroot
 #Disabling setuid
 echo "setuid off" >> %{_builddir}/%{name}-%{version}/gmetad/gmetad.conf
 
-find  $RPM_BUILD_DIR/%{name}-%{version}/ -name "CVS" | xargs rm -rf
+find  %{_builddir}/%{name}-%{version}/ -name "CVS" | xargs rm -rf
 
 #cp -f %{_builddir}/%{name}-core-%{version}/lib/ganglia/* %{buildroot}/%{_oldincludedir}/ganglia/
 cp -f %{_builddir}/%{name}-%{version}/mans/* %{buildroot}%{_mandir}/man1/
