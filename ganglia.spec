@@ -5,8 +5,8 @@
 
 Name:		ganglia
 License:	BSD
-Version:	3.1.7
-Release:	%mkrel 4
+Version:	3.2.0
+Release:	%mkrel 1
 Group:		Monitoring
 Summary:	Cluster Toolkit
 URL:		http://ganglia.sourceforge.net
@@ -21,7 +21,6 @@ Source5:	README.script
 Source6:	ganglia-monitor-logrotate.d
 Source7:	gmond-init-add-route
 Source8:	gmetad.init
-Patch0:		ganglia-3.1.2-fix-format-errors.patch
 Buildrequires:	apr-devel
 BuildRequires:	confuse-devel
 BuildRequires:	expat-devel
@@ -117,7 +116,6 @@ cluster, hosts and host metrics to be viewed in real-time.
 %prep
 %setup -q -T -n %{name}-monitor-script-%{script_version} -b 2
 %setup -q -T -n %{name}-%{version} -b 0
-%patch0 -p1
 
 %build
 rm -rf %{buildroot}
@@ -220,7 +218,7 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 
 %files core
 %defattr(-,root,root)
-%doc README AUTHORS ChangeLog COPYING INSTALL gmond/gmond.conf.html
+%doc AUTHORS COPYING INSTALL gmond/gmond.conf.html BUGS NEWS
 %{_bindir}/gmetric
 %{_bindir}/gstat
 %multiarch %{multiarch_bindir}/ganglia-config
