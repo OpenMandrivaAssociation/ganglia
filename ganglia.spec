@@ -24,7 +24,7 @@ Source8:	gmetad.init
 Buildrequires:	apr-devel
 BuildRequires:	confuse-devel
 BuildRequires:	expat-devel
-BuildRequires:	freetype2-static-devel
+BuildRequires:	%mklibname freetype6-devel
 Buildrequires:	gettext-devel
 BuildRequires:	python-devel
 BuildRequires:	rrdtool-devel
