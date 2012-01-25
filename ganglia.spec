@@ -206,7 +206,9 @@ rm -rf  %{buildroot}%{_includedir}/*.h
 %{_builddir}/%{name}-%{version}/gmond/gmond -t > %{buildroot}%{_sysconfdir}/gmond.conf
 perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfdir}/gmond.conf
 
+%if %mdkversion < 201010
 %multiarch_binaries $RPM_BUILD_ROOT%{_bindir}/ganglia-config
+%endif
 
 %files gmetad
 %defattr(-,root,root)
@@ -221,24 +223,29 @@ perl -pi -e 's|name = "unspecified".*|name = "Cluster"|' %{buildroot}%{_sysconfd
 %doc AUTHORS COPYING INSTALL gmond/gmond.conf.html BUGS NEWS
 %{_bindir}/gmetric
 %{_bindir}/gstat
+%if %mdkversion < 201010
 %multiarch %{multiarch_bindir}/ganglia-config
+%elsif
+%{_bindir}/ganglia-config
+%endif
 %{_bindir}/ganglia-config
 %{_sbindir}/gmond
 %config(noreplace) %{_initrddir}/gmond
 %config(noreplace) %{_sysconfdir}/gmond.conf
 %{_mandir}/man1/*
+%{_mandir}/man5/*
 %attr(644,root,root)%config(noreplace) %{_sysconfdir}/logrotate.d/ganglia-monitor-core
 
 
 %files -n %{lib_name}
 %defattr(-,root,root)
-%doc README AUTHORS ChangeLog COPYING INSTALL
-%{_libdir}/libganglia-%{version}.so.*
+%doc AUTHORS COPYING INSTALL
+%{_libdir}/libganglia-%{version}.0.so.*
 %{_libdir}/ganglia/*.so
 
 %files -n %{lib_name}-devel
 %defattr(-,root,root)
-%doc README AUTHORS ChangeLog COPYING INSTALL
+%doc AUTHORS COPYING INSTALL
 %{_includedir}/*
 %{_libdir}/libganglia.so
 %{_libdir}/libganglia.la
