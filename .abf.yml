@@ -1,0 +1,9 @@
+sources:
+  "ganglia-3.2.0.tar.gz:"	6ff0e87b96d891bd0c057e75d5fc2bc752e68cd1
+  "ganglia-monitor-logrotate.d:"	010be7d9cf8734f1915c9ec7aef2b2a39935a441
+  "ganglia-monitor-script-0.3.tar.bz2:"	9e9832dac24be1b006527139f908fd2f8380ded7
+  "ganglia-monitor-script.d:"	912a3d422b4221d4a893a69ac6aed63117095fc6
+  "ganglia-script:"	866b685a672d382966bb8288b3cc089a080b1d7e
+  "gmetad.init:"	16379636f45839856b8ada48aa953e3afd384297
+  "gmond-init-add-route:"	c6cfa5f89a6b17a927b698bdd25a361272ac277c
+  "README.script:"	8438511b4bfd170d35e215d950bbcd14ed2106fa
