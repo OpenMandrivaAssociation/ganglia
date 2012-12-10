@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+use strict;
+use POSIX qw(setsid);
+
+my $TIMER=60;
+
+
+my $fichier;
+my $scriptdir;
+
+if (defined($ARGV[0])){
+ print "parametre\n";
+ $scriptdir=$ARGV[0];
+ }
+else{
+ print "pas de parametre\n";
+ $scriptdir="/usr/share/ganglia-monitor-script/script/";
+}
+#Father
+
+ defined(my $pid = fork)         or die "Can't fork: $!";
+
+#Son
+ exit if $pid;
+ setsid                          or die "Can't start a new session: $!";
+
+ #Dans le fils
+ 
+ for (;;) {
+  opendir(REP, $scriptdir) or die "Can't open: $!";
+  while (defined($fichier=readdir(REP))){
+  system("$scriptdir/$fichier"); 
+ }
+ closedir(REP);
+	 
+ sleep($TIMER);
+ }

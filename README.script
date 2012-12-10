@@ -1,0 +1,18 @@
+=== Ganglia Monitoring Script ===
+
+Ganglia Monitor Script is an easy way to
+add value to monitor for gmond.
+
+
+You can add/edit/remove script. They are
+located in the 
+/usr/share/ganglia-monitor-script/script
+directory.
+
+
+You've made change in the script:
+
+If the service ganglia-monitor-script is
+running you don't have to restart it.
+It'll scan the directory itself every
+60 secondes.

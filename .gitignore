@@ -1,8 +1,0 @@
-ganglia-3.2.0.tar.gz
-ganglia-monitor-logrotate.d
-ganglia-monitor-script-0.3.tar.bz2
-ganglia-monitor-script.d
-ganglia-script
-gmetad.init
-gmond-init-add-route
-README.script
