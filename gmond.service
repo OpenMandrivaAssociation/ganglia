@@ -1,0 +1,11 @@
+[Unit]
+Description=Ganglia Monitor Daemon
+After=network.target
+
+[Service]
+Type=forking
+ExecStartPre=-/sbin/route add -net 239.2.11.0 netmask 255.255.255.0 dev eth0
+ExecStart=/usr/sbin/gmond
+
+[Install]
+WantedBy=multi-user.target

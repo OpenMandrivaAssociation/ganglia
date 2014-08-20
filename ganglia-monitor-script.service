@@ -1,0 +1,10 @@
+[Unit]
+Description=Ganglia Monitor Script - an extrension for Ganglia Monitor
+
+[Service]
+Type=forking
+Environment=SCRIPTPATH=/usr/share/ganglia-script/script/
+ExecStart=/usr/bin/ganglia-script $SCRIPTPATH
+
+[Install]
+WantedBy=multi-user.target  

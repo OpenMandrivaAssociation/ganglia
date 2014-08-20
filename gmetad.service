@@ -1,0 +1,10 @@
+[Unit]
+Description=GANGLIA gmetad - daemon aggregating monitoring data from several clusters
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/sbin/gmetad
+
+[Install]
+WantedBy=multi-user.target 
