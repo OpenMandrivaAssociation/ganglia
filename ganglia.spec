@@ -8,7 +8,7 @@
 Summary:	Cluster Toolkit
 Name:		ganglia
 Version:	3.2.0
-Release:	5
+Release:	6
 License:	BSD
 Group:		Monitoring
 Url:		http://ganglia.sourceforge.net
