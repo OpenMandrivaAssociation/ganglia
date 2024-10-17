@@ -11,7 +11,7 @@ Version:	3.2.0
 Release:	6
 License:	BSD
 Group:		Monitoring
-Url:		http://ganglia.sourceforge.net
+Url:		https://ganglia.sourceforge.net
 Source0:	http://downloads.sourceforge.net/ganglia/%{name}-%{version}.tar.gz
 Source2:	%{name}-monitor-script-%{script_version}.tar.bz2
 Source3:	%{name}-monitor-script.service
